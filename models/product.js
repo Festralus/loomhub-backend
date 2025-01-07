@@ -26,6 +26,11 @@ const ProductSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    rating: {
+      type: Number,
+    },
+    oldPrice: { type: Number, min: 0 },
+    salesCount: { type: Number, min: 0 },
   },
   { timestamps: true }
 );
