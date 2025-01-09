@@ -13,6 +13,9 @@ const {
   getTopSelling,
 } = require("../controllers/productsController");
 const { updateOrderStatus } = require("../controllers/ordersController");
+const {
+  GetWebsiteReviews,
+} = require("../controllers/websiteReviewsController");
 
 // Endpoints
 router.get("/users", getUsers);
@@ -23,5 +26,6 @@ router.get("/products", getProducts);
 router.get("/getNewArrivals", getNewArrivals);
 router.get("/getTopSelling", getTopSelling);
 router.put("/orders/:orderId", updateOrderStatus);
+router.get("/getWebsiteReviews", GetWebsiteReviews);
 
 module.exports = router;
