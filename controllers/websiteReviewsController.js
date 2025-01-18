@@ -23,7 +23,7 @@ exports.GetWebsiteReviews = async (req, res) => {
       },
       { $sort: { rating: -1 } },
     ]);
-    console.log(reviews[0]);
+    // console.log(reviews[0]);
     res.json(reviews);
   } catch (err) {
     console.log(err);

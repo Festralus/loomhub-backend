@@ -35,8 +35,8 @@ const users = Array.from({ length: 30 }, (_, i) => ({
 
 // Generate reviews
 const reviews = Array.from({ length: 30 }, (_, i) => ({
-  rating: Math.floor(Math.random() * 5) + 1,
-  comment: `This is a sample review number ${i + 1}.`,
+  rating: Math.floor(Math.random() * 3 + 3),
+  comment: `This is a sample review number ${i + 31}.`,
 }));
 
 (async () => {
