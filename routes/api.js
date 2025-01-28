@@ -8,9 +8,10 @@ const {
   checkNicknameAvailability,
 } = require("../controllers/usersController");
 const {
-  getProducts,
+  getAllProducts,
   getNewArrivals,
   getTopSelling,
+  searchProducts,
 } = require("../controllers/productsController");
 const { updateOrderStatus } = require("../controllers/ordersController");
 const {
@@ -22,7 +23,8 @@ router.get("/users", getUsers);
 router.post("/users", createUser);
 router.post("/login", loginUser);
 router.post("/nicknameAvailability", checkNicknameAvailability);
-router.get("/products", getProducts);
+router.get("/products", getAllProducts);
+router.get("/products/search", searchProducts);
 router.get("/getNewArrivals", getNewArrivals);
 router.get("/getTopSelling", getTopSelling);
 router.put("/orders/:orderId", updateOrderStatus);
