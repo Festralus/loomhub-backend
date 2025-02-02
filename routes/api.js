@@ -22,6 +22,7 @@ const {
 router.get("/users", getUsers);
 router.post("/users", createUser);
 router.post("/login", loginUser);
+router.post("/registration", createUser);
 router.post("/nicknameAvailability", checkNicknameAvailability);
 router.get("/products", getAllProducts);
 router.get("/products/search", searchProducts);

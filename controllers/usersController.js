@@ -15,20 +15,69 @@ exports.getUsers = async (req, res) => {
 };
 
 // Create a new user
+// exports.createUser = async (req, res) => {
+//   try {
+//     const { email, password, nickname } = req.body;
+//     const role = "empty";
+//     const profilePicUrl = "empty";
+//     const address = [];
+
+//     // Check if user already exists
+//     const existingUserEmail = await User.findOne({ email }).exec();
+//     const existingUserNickname = await User.findOne({ nickname }).exec();
+
+//     if (existingUserEmail) {
+//       return res.status(400).json({ message: "Email already exists" });
+//     }
+//     if (existingUserNickname) {
+//       return res.status(400).json({ message: "Nickname already exists" });
+//     }
+
+//     // Create new user
+//     // Password
+//     const saltRounds = 10;
+//     const salt = await bcrypt.genSalt(saltRounds);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+
+//     // GID
+//     const GID = `user-${uuidv4()}`;
+
+//     const newUser = new User({
+//       email,
+//       password: hashedPassword,
+//       nickname,
+//       GID,
+//       role,
+//       profilePicUrl,
+//       address,
+//     });
+
+//     await newUser.save();
+
+//     res.json({ message: "User created successfully" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+// Create a new user
 exports.createUser = async (req, res) => {
   try {
-    const { email, password, nickname } = req.body;
-    const role = "empty";
+    const { nickname, password } = req.body;
+    // console.log(email);
+    const role = "user";
     const profilePicUrl = "empty";
-    const address = [];
+    const address = null;
 
     // Check if user already exists
-    const existingUserEmail = await User.findOne({ email }).exec();
+    // Email and Nickname
+    // const existingUserEmail = await User.findOne({ email }).exec();
     const existingUserNickname = await User.findOne({ nickname }).exec();
 
-    if (existingUserEmail) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
+    // if (existingUserEmail) {
+    //   return res.status(400).json({ message: "Email already exists" });
+    // }
     if (existingUserNickname) {
       return res.status(400).json({ message: "Nickname already exists" });
     }
@@ -43,13 +92,13 @@ exports.createUser = async (req, res) => {
     const GID = `user-${uuidv4()}`;
 
     const newUser = new User({
-      email,
-      password: hashedPassword,
+      // email,
       nickname,
+      password: hashedPassword,
       GID,
       role,
-      profilePicUrl,
       address,
+      profilePicUrl,
     });
 
     await newUser.save();
@@ -64,12 +113,12 @@ exports.createUser = async (req, res) => {
 // Login user
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { nickname, password } = req.body;
     // Allows to login via nickname as well as email
-    const nickname = email;
+    // const nickname = email;
 
     // Find user by email OR nickname
-    const user = email.includes("@")
+    const user = nickname.includes("@")
       ? await User.findOne({ email }).exec()
       : await User.findOne({ nickname }).exec();
 
