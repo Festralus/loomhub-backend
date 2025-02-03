@@ -144,7 +144,7 @@ exports.loginUser = async (req, res) => {
 
     // Send token in response
     res.json({
-      user,
+      user: user.nickname,
       token,
       message: "Login successful",
     });
