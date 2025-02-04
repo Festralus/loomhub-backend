@@ -38,7 +38,8 @@ exports.getNewArrivals = async (req, res) => {
       rating: product.rating,
       oldPrice: product.oldPrice,
     }));
-    console.log(products);
+
+    // console.log(products);
     res.json(payload);
   } catch (err) {
     console.error(err);
