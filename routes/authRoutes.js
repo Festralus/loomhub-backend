@@ -7,12 +7,12 @@ router.get(
   "/protected",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const responseObj = {
+    const payload = {
       nickname: req.user.nickname,
       profilePicUrl: req.user.profilePicUrl,
     };
 
-    res.json(responseObj);
+    res.json(payload);
   }
 );
 

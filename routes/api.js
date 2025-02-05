@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getUsers,
+  // getUsers,
   createUser,
   loginUser,
   checkNicknameAvailability,
@@ -19,7 +19,7 @@ const {
 } = require("../controllers/websiteReviewsController");
 
 // Endpoints
-router.get("/users", getUsers);
+// router.get("/users", getUsers);
 router.post("/users", createUser);
 router.post("/login", loginUser);
 router.post("/registration", createUser);

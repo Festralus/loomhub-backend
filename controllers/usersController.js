@@ -4,15 +4,15 @@ const User = require("../models/User");
 const { v4: uuidv4 } = require("uuid");
 
 // Get all users
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await User.find().exec();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+// exports.getUsers = async (req, res) => {
+//   try {
+//     const users = await User.find().exec();
+//     res.json(users);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 // Create a new user
 // exports.createUser = async (req, res) => {
@@ -98,7 +98,8 @@ exports.createUser = async (req, res) => {
       GID,
       role,
       address,
-      profilePicUrl,
+      profilePicUrl:
+        "https://i.pinimg.com/736x/b7/5b/29/b75b29441bbd967deda4365441497221.jpg",
     });
 
     await newUser.save();
@@ -118,9 +119,11 @@ exports.loginUser = async (req, res) => {
     // const nickname = email;
 
     // Find user by email OR nickname
-    const user = nickname.includes("@")
-      ? await User.findOne({ email }).exec()
-      : await User.findOne({ nickname }).exec();
+    // const user = nickname.includes("@")
+    //   ? await User.findOne({ email }).exec()
+    //   : await User.findOne({ nickname }).exec();
+
+    const user = await User.findOne({ nickname }).exec();
 
     // If no user found
     if (!user) {
