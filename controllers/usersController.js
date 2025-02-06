@@ -162,11 +162,14 @@ exports.checkNicknameAvailability = async (req, res) => {
   try {
     const { nickname } = req.body;
 
-    const user = await User.findOne({ nickname }).exec();
+    // const user = await User.findOne({ nickname }).exec();
+    const user = await User.findOne({
+      nickname: { $regex: new RegExp("^" + nickname.toLowerCase() + "$", "i") },
+    }).exec();
 
     if (user) {
       return res
-        .status(200)
+        .status(409)
         .json({ message: "This nickname is already taken" });
     } else if (!user) {
       return res.status(200).json({ message: "This nickname is available" });
