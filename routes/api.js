@@ -12,6 +12,7 @@ const {
   getNewArrivals,
   getTopSelling,
   searchProducts,
+  productByGid,
 } = require("../controllers/productsController");
 const { updateOrderStatus } = require("../controllers/ordersController");
 const {
@@ -30,5 +31,6 @@ router.get("/getNewArrivals", getNewArrivals);
 router.get("/getTopSelling", getTopSelling);
 router.put("/orders/:orderId", updateOrderStatus);
 router.get("/getWebsiteReviews", GetWebsiteReviews);
+router.post("/productByGid", productByGid);
 
 module.exports = router;

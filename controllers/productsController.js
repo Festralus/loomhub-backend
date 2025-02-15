@@ -100,3 +100,16 @@ exports.searchProducts = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// Get a product by GID
+exports.productByGid = async (req, res) => {
+  try {
+    const product = await Product.findOne({ GID: req.body.itemGID });
+    // Exclude some fields and values
+    const { salesCount, ...payload } = product.toObject();
+    res.json(payload);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Product not found" });
+  }
+};
