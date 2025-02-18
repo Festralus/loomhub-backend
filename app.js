@@ -7,9 +7,14 @@ const dotenv = require("dotenv");
 // Create an app
 const app = express();
 
+// CORS configuration options
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://loomhub.vercel.app"],
+};
+
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(passport.initialize());
 
 // Getting keys
