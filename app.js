@@ -16,8 +16,7 @@ const corsOptions = {
 
 // Middleware
 app.use(express.json());
-// app.use(cors(corsOptions));
-app.use();
+app.use(cors(corsOptions));
 app.use(passport.initialize());
 
 // Getting keys
