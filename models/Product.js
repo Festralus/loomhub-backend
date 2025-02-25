@@ -9,6 +9,7 @@ const ProductSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      required: true,
     },
     price: { type: Number, required: true, min: 0 },
     GID: {
@@ -20,22 +21,41 @@ const ProductSchema = new mongoose.Schema(
         size: { type: String, required: true },
         color: { type: String, required: true },
         quantity: { type: Number, required: true, min: 0 },
-        clothingType: {
-          type: String,
-          enum: ["men", "women", "unisex"],
-          required: true,
-        },
       },
     ],
     images: {
       type: Array,
       required: true,
     },
-    rating: {
-      type: Number,
-    },
+    rating: { type: Number, min: 0 },
     oldPrice: { type: Number, min: 0 },
     salesCount: { type: Number, min: 0 },
+    productCategory: {
+      type: String,
+      required: true,
+      enum: [
+        "Shirts",
+        "T-shirts",
+        "Dresses",
+        "Shoes",
+        "Sneakers",
+        "Boots",
+        "Hoodies",
+        "Underwear",
+        "Nightwear",
+        "Suits",
+        "Jackets",
+        "Jeans",
+        "Pants",
+        "Coats",
+        "Tops",
+      ],
+    },
+    clothingType: {
+      type: String,
+      required: true,
+      enum: ["Men", "Women", "Unisex"],
+    },
   },
   { timestamps: true }
 );

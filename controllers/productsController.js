@@ -86,6 +86,7 @@ exports.searchProducts = async (req, res) => {
 
     const payload = products.map((product) => ({
       name: product.name,
+      description: product.description,
       price: product.price,
       GID: product.GID,
       images: product.images,
