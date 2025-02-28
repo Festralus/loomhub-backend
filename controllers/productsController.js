@@ -22,12 +22,134 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
-// Get new arrivals
-exports.getNewArrivals = async (req, res) => {
+exports.getSliderProductsList = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 9;
   try {
-    const products = (
-      await Product.find().sort({ createdAt: -1 }).exec()
-    ).slice(0, req.query.limit);
+    let products;
+    let uniqueProducts = [];
+    switch (req.query.filterName) {
+      // Finding 9 products with highest sales count
+      case "getTopSelling":
+        products = (await Product.find().sort({ salesCount: -1 }).exec()).slice(
+          0,
+          req.query.limit
+        );
+        break;
+
+      // Finding 9 newest products in the database
+      case "getNewArrivals":
+        products = (await Product.find().sort({ createdAt: -1 })).splice(
+          0,
+          req.query.limit
+        );
+        console.log(products);
+        break;
+
+      // Find 9 items related to the chosen item by various values
+      case "getRelatedItems":
+        // Function that exludes item repetition during search
+        const uniqueGIDs = new Set();
+
+        function addUniqueProducts(items) {
+          for (const item of items) {
+            if (!uniqueGIDs.has(item.GID)) {
+              uniqueGIDs.add(item.GID);
+              uniqueProducts.push(item);
+              if (uniqueProducts.length === req.query.limit) return;
+            }
+          }
+        }
+
+        // Find up to 9 items that share product category
+        const pipelineCategory = await Product.aggregate([
+          {
+            $match: {
+              $or: [
+                {
+                  productCategory: req.query.productCategory,
+                  clothingType: req.query.clothingType,
+                },
+                {
+                  productCategory: req.query.productCategory,
+                  clothingType: "Unisex",
+                },
+              ],
+            },
+          },
+          { $sample: { size: limit } },
+        ]);
+
+        // Exlude the chosen item from the search
+        products = pipelineCategory.filter(
+          (item) => item.GID != req.query.itemId
+        );
+
+        // Add an item from request to avoid repetition
+        uniqueGIDs.add(req.query.itemId);
+        addUniqueProducts(products);
+
+        if (uniqueProducts.length >= req.query.limit) {
+          products = uniqueProducts;
+          break;
+        }
+
+        // Find up to 9 items that share product brand
+        const pipelineBrand = await Product.aggregate([
+          {
+            $match: {
+              $or: [
+                {
+                  brand: req.query.brand,
+                  clothingType: req.query.clothingType,
+                },
+                { brand: req.query.brand, clothingType: "Unisex" },
+              ],
+            },
+          },
+        ]);
+
+        addUniqueProducts(pipelineBrand);
+
+        if (uniqueProducts.length >= req.query.limit) {
+          products = uniqueProducts;
+          break;
+        }
+
+        // Find up to 9 items that share product clothing type
+        const pipelineType = await Product.aggregate([
+          {
+            $match: {
+              clothingType: req.query.clothingType,
+            },
+          },
+        ]);
+
+        addUniqueProducts(pipelineType);
+
+        if (uniqueProducts.length >= req.query.limit) {
+          products = uniqueProducts;
+          break;
+        }
+
+        // Find up to 9 items with clothing type: Unisex
+        const pipelineUnisex = await Product.aggregate([
+          {
+            $match: {
+              clothingType: "Unisex",
+            },
+          },
+        ]);
+
+        addUniqueProducts(pipelineUnisex);
+
+        products = uniqueProducts;
+        break;
+
+      default:
+        return res.status(400).json({
+          message: "Invalid filter name, fetching slider products list failed.",
+        });
+    }
 
     const payload = products.map((product) => ({
       name: product.name,
@@ -39,35 +161,10 @@ exports.getNewArrivals = async (req, res) => {
       oldPrice: product.oldPrice,
     }));
 
-    // console.log(products);
     res.json(payload);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-// Get top selling
-exports.getTopSelling = async (req, res) => {
-  try {
-    const products = (
-      await Product.find().sort({ salesCount: -1 }).exec()
-    ).slice(0, req.query.limit);
-
-    const payload = products.map((product) => ({
-      name: product.name,
-      price: product.price,
-      GID: product.GID,
-      images: product.images,
-      timestamps: product.timestamps,
-      rating: product.rating,
-      oldPrice: product.oldPrice,
-    }));
-
-    res.json(payload);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Fetching slider products list failed." });
   }
 };
 

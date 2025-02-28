@@ -27,6 +27,10 @@ const ProductSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    detailsImages: {
+      type: Array,
+      required: true,
+    },
     rating: { type: Number, min: 0 },
     oldPrice: { type: Number, min: 0 },
     salesCount: { type: Number, min: 0 },
@@ -51,10 +55,26 @@ const ProductSchema = new mongoose.Schema(
         "Tops",
       ],
     },
-    clothingType: {
+    productCategory: {
       type: String,
       required: true,
       enum: ["Men", "Women", "Unisex"],
+    },
+    composition: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+    careInstructions: {
+      type: String,
+      required: true,
+    },
+    brandStyleID: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

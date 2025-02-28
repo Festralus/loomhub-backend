@@ -9,8 +9,7 @@ const {
 } = require("../controllers/usersController");
 const {
   getAllProducts,
-  getNewArrivals,
-  getTopSelling,
+  getSliderProductsList,
   searchProducts,
   productByGid,
 } = require("../controllers/productsController");
@@ -30,8 +29,7 @@ router.post("/registration", createUser);
 router.post("/nicknameAvailability", checkNicknameAvailability);
 router.get("/products", getAllProducts);
 router.get("/products/search", searchProducts);
-router.get("/getNewArrivals", getNewArrivals);
-router.get("/getTopSelling", getTopSelling);
+router.get("/getSliderProductsList", getSliderProductsList);
 router.put("/orders/:orderId", updateOrderStatus);
 router.get("/getWebsiteReviews", GetWebsiteReviews);
 router.post("/productByGid", productByGid);

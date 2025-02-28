@@ -26,6 +26,6 @@ exports.GetWebsiteReviews = async (req, res) => {
     // console.log(reviews[0]);
     res.json(reviews);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
