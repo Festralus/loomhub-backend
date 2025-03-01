@@ -178,16 +178,17 @@ exports.searchProducts = async (req, res) => {
 
     const regex = new RegExp(query, "i");
     const products = await Product.find({
-      $or: [{ name: regex }, { description: regex }],
+      $or: [{ name: regex }, { description: regex }, { brand: regex }],
     }).exec();
 
     const payload = products.map((product) => ({
       name: product.name,
       description: product.description,
+      brand: product.brand,
       price: product.price,
       GID: product.GID,
       images: product.images,
-      timestamps: product.timestamps,
+      timestamps: product.createdAt,
       rating: product.rating,
       oldPrice: product.oldPrice,
     }));

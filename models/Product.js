@@ -76,6 +76,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    brand: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
