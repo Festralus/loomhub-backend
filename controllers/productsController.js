@@ -3,17 +3,11 @@ const Product = require("../models/Product");
 // Get all products
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 }).exec();
+    const products = await Product.find().sort({ createdAt: -1 }).lean().exec();
 
-    const payload = products.map((product) => ({
-      name: product.name,
-      price: product.price,
-      GID: product.GID,
-      images: product.images,
-      timestamps: product.timestamps,
-      rating: product.rating,
-      oldPrice: product.oldPrice,
-    }));
+    const payload = products.map(
+      ({ description, updatedAt, ...product }) => product
+    );
 
     res.json(payload);
   } catch (err) {
@@ -42,7 +36,7 @@ exports.getSliderProductsList = async (req, res) => {
           0,
           req.query.limit
         );
-        console.log(products);
+        // console.log(products);
         break;
 
       // Find 9 items related to the chosen item by various values
