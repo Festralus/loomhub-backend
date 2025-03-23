@@ -163,19 +163,89 @@ exports.getSliderProductsList = async (req, res) => {
 };
 
 // Search products
+// exports.searchProducts = async (req, res) => {
+//   try {
+//     const { query } = req.query;
+//     if (!query) {
+//       return res.status(400);
+//     }
+
+//     const regex = new RegExp(query, "i");
+//     const products = await Product.find({
+//       $or: [
+//         { name: regex },
+//         { description: regex },
+//         { brand: regex },
+//         { productCategory: regex },
+//       ],
+//     }).exec();
+
+//     const payload = products.map((product) => ({
+//       name: product.name,
+//       description: product.description,
+//       brand: product.brand,
+//       price: product.price,
+//       GID: product.GID,
+//       images: product.images,
+//       timestamps: product.createdAt,
+//       rating: product.rating,
+//       oldPrice: product.oldPrice,
+//     }));
+
+//     res.json(payload);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 exports.searchProducts = async (req, res) => {
   try {
     const { query } = req.query;
     if (!query) {
-      return res.status(400);
+      return res.status(400).json({ message: "Query parameter is required" });
     }
 
     const regex = new RegExp(query, "i");
-    const products = await Product.find({
-      $or: [{ name: regex }, { description: regex }, { brand: regex }],
-    }).exec();
+    let results = [];
 
-    const payload = products.map((product) => ({
+    // 1. Search by name first
+    results = await Product.find({ name: regex }).limit(5).exec();
+
+    // 2. If not enough results, search by productCategory
+    if (results.length < 5) {
+      const categoryResults = await Product.find({
+        productCategory: regex,
+        _id: { $nin: results.map((p) => p._id) }, // Exclude already found results
+      })
+        .limit(5 - results.length)
+        .exec();
+      results = [...results, ...categoryResults];
+    }
+
+    // 3. If still not enough, search by brand
+    if (results.length < 5) {
+      const brandResults = await Product.find({
+        brand: regex,
+        _id: { $nin: results.map((p) => p._id) },
+      })
+        .limit(5 - results.length)
+        .exec();
+      results = [...results, ...brandResults];
+    }
+
+    // 4. If still not enough, search by description
+    if (results.length < 5) {
+      const descriptionResults = await Product.find({
+        description: regex,
+        _id: { $nin: results.map((p) => p._id) },
+      })
+        .limit(5 - results.length)
+        .exec();
+      results = [...results, ...descriptionResults];
+    }
+
+    // Format the response payload
+    const payload = results.map((product) => ({
       name: product.name,
       description: product.description,
       brand: product.brand,
