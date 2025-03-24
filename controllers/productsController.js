@@ -276,3 +276,12 @@ exports.productByGid = async (req, res) => {
     res.status(500).json({ message: "Product not found" });
   }
 };
+
+// Get filtered products
+exports.getFilteredProducts = async (req, res) => {
+  try {
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Filtered products not found" });
+  }
+};
