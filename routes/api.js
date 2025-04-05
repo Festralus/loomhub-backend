@@ -8,7 +8,7 @@ const {
   checkNicknameAvailability,
 } = require("../controllers/usersController");
 const {
-  getAllProducts,
+  getProducts,
   getSliderProductsList,
   searchProducts,
   productByGid,
@@ -27,7 +27,7 @@ router.post("/users", createUser);
 router.post("/login", loginUser);
 router.post("/registration", createUser);
 router.post("/nicknameAvailability", checkNicknameAvailability);
-router.get("/products", getAllProducts);
+router.get("/products", getProducts);
 router.get("/products/search", searchProducts);
 router.get("/getSliderProductsList", getSliderProductsList);
 router.put("/orders/:orderId", updateOrderStatus);
