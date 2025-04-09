@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const { v4: uuidv4 } = require("uuid");
 
 // REVIEW START
 exports.getProducts = async (req, res) => {
@@ -430,5 +431,112 @@ exports.productByGid = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Product not found" });
+  }
+};
+
+// Add an item /item/add_new_item
+exports.addNewItem = async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      price,
+      oldPrice,
+      images,
+      brand,
+      productCategory,
+      clothingType,
+      dressStyle,
+      stock,
+      rating,
+      salesCount = 0, // Set default salesCount to 0 if it's not provided
+      sizes,
+      colors,
+      composition,
+      country,
+      brandStyleID,
+      careInstructions,
+      detailsImages,
+    } = req.body;
+
+    // If any required field is missing, return an error
+    if (
+      !name ||
+      !price ||
+      !images ||
+      !productCategory ||
+      !clothingType ||
+      !stock
+    ) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    // Convert price and rating to numbers
+    const priceValue = parseFloat(price); // Ensure price is a number
+    const ratingValue = parseFloat(rating); // Ensure rating is a number
+    const oldPriceValue = oldPrice === null ? null : parseFloat(oldPrice); // Ensure oldPrice is a number if provided
+
+    // Check if price or rating are not valid numbers
+    if (isNaN(priceValue) || isNaN(ratingValue)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid price or rating value." });
+    }
+
+    // Generate a unique GID (UUID)
+    const GID = uuidv4(); // Use UUID for unique GID
+    console.log(GID);
+
+    // Ensure stock is an array with valid items
+    if (!Array.isArray(stock) || stock.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Stock must be an array with at least one item." });
+    }
+
+    // Validate that each stock item has the required fields
+    stock.forEach((item) => {
+      if (!item.size || !item.color || typeof item.quantity !== "number") {
+        return res.status(400).json({
+          message: "Each stock item must have Size, Color, and Quantity.",
+        });
+      }
+    });
+
+    // Create a new Product instance with the generated GID
+    const newProduct = new Product({
+      name,
+      description,
+      price: priceValue, // Save as number
+      oldPrice: oldPriceValue, // Save as number or null
+      images,
+      brand,
+      productCategory,
+      clothingType,
+      dressStyle: dressStyle || [], // Default to empty array if not provided
+      stock,
+      rating: ratingValue, // Save as number
+      salesCount, // Sales count will default to 0 if not provided
+      GID,
+      sizes,
+      colors,
+      composition,
+      country,
+      brandStyleID,
+      careInstructions,
+      detailsImages,
+    });
+
+    console.log(newProduct);
+    // Save the new product to the database
+    await newProduct.save();
+
+    // Return success response
+    res
+      .status(201)
+      .json({ message: "Product added successfully.", product: newProduct });
+  } catch (err) {
+    console.error("Error while adding new product:", err);
+    res.status(500).json({ message: "Error while adding new product." });
   }
 };

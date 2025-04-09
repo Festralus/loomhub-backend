@@ -1,64 +1,78 @@
 const mongoose = require("mongoose");
 
-const ProductSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
       required: true,
     },
-    price: { type: Number, required: true, min: 0 },
-    GID: {
+    price: {
+      type: Number,
+      required: true,
+    },
+    oldPrice: {
+      type: Number,
+      default: null,
+    },
+    images: {
+      type: [String],
+      required: true,
+    },
+    brand: {
       type: String,
+      required: true,
+    },
+    brandStyleID: {
+      type: String,
+      required: true,
+    },
+    productCategory: {
+      type: String,
+      // enum: ["T-shirt", "Jeans", "Jacket", "Sweater", "Shoes"],
+      required: true,
+    },
+    clothingType: {
+      type: String,
+      enum: ["Men", "Women", "Unisex"],
+      required: true,
+    },
+    colors: {
+      type: [String],
+      required: true,
+    },
+    sizes: {
+      type: [String],
       required: true,
     },
     stock: [
       {
-        size: { type: String, required: true },
-        color: { type: String, required: true },
-        quantity: { type: Number, required: true, min: 0 },
+        size: {
+          type: String,
+          required: true,
+        },
+        color: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
       },
     ],
-    images: {
-      type: Array,
+    rating: {
+      type: Number,
+      min: 0,
+      max: 5,
       required: true,
     },
-    detailsImages: {
-      type: Array,
-      required: true,
-    },
-    rating: { type: Number, min: 0 },
-    oldPrice: { type: Number, min: 0 },
-    salesCount: { type: Number, min: 0 },
-    productCategory: {
-      type: String,
-      required: true,
-      enum: [
-        "Shirts",
-        "T-shirts",
-        "Dresses",
-        "Shoes",
-        "Sneakers",
-        "Boots",
-        "Hoodies",
-        "Underwear",
-        "Nightwear",
-        "Suits",
-        "Jackets",
-        "Jeans",
-        "Pants",
-        "Coats",
-        "Tops",
-      ],
-    },
-    productCategory: {
-      type: String,
-      required: true,
-      enum: ["Men", "Women", "Unisex"],
+    salesCount: {
+      type: Number,
+      default: 0,
     },
     composition: {
       type: String,
@@ -72,16 +86,20 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    brandStyleID: {
-      type: String,
+    detailsImages: {
+      type: [String],
       required: true,
     },
-    brand: {
+    GID: {
       type: String,
-      required: true,
+      requied: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-module.exports = mongoose.model("Product", ProductSchema);
+const Product = mongoose.model("Product", productSchema);
+
+module.exports = Product;

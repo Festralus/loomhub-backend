@@ -12,6 +12,7 @@ const {
   getSliderProductsList,
   searchProducts,
   productByGid,
+  addNewItem,
 } = require("../controllers/productsController");
 const { updateOrderStatus } = require("../controllers/ordersController");
 const {
@@ -34,5 +35,6 @@ router.put("/orders/:orderId", updateOrderStatus);
 router.get("/getWebsiteReviews", GetWebsiteReviews);
 router.post("/productByGid", productByGid);
 router.post("/findProductReview", findProductReview);
+router.post("/addNewItem", addNewItem);
 
 module.exports = router;
