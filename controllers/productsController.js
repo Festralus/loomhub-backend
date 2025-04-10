@@ -449,7 +449,7 @@ exports.addNewItem = async (req, res) => {
       dressStyle,
       stock,
       rating,
-      salesCount = 0, // Set default salesCount to 0 if it's not provided
+      salesCount,
       sizes,
       colors,
       composition,
@@ -472,9 +472,9 @@ exports.addNewItem = async (req, res) => {
     }
 
     // Convert price and rating to numbers
-    const priceValue = parseFloat(price); // Ensure price is a number
-    const ratingValue = parseFloat(rating); // Ensure rating is a number
-    const oldPriceValue = oldPrice === null ? null : parseFloat(oldPrice); // Ensure oldPrice is a number if provided
+    const priceValue = parseFloat(price);
+    const ratingValue = parseFloat(rating);
+    const oldPriceValue = oldPrice === null ? null : parseFloat(oldPrice);
 
     // Check if price or rating are not valid numbers
     if (isNaN(priceValue) || isNaN(ratingValue)) {
@@ -484,7 +484,7 @@ exports.addNewItem = async (req, res) => {
     }
 
     // Generate a unique GID (UUID)
-    const GID = uuidv4(); // Use UUID for unique GID
+    const GID = `item-${uuidv4()}`;
     console.log(GID);
 
     // Ensure stock is an array with valid items
@@ -507,16 +507,16 @@ exports.addNewItem = async (req, res) => {
     const newProduct = new Product({
       name,
       description,
-      price: priceValue, // Save as number
-      oldPrice: oldPriceValue, // Save as number or null
+      price: priceValue,
+      oldPrice: oldPriceValue,
       images,
       brand,
       productCategory,
       clothingType,
-      dressStyle: dressStyle || [], // Default to empty array if not provided
+      dressStyle: dressStyle || [],
       stock,
-      rating: ratingValue, // Save as number
-      salesCount, // Sales count will default to 0 if not provided
+      rating: ratingValue,
+      salesCount,
       GID,
       sizes,
       colors,
@@ -527,7 +527,6 @@ exports.addNewItem = async (req, res) => {
       detailsImages,
     });
 
-    console.log(newProduct);
     // Save the new product to the database
     await newProduct.save();
 

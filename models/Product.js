@@ -94,6 +94,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       requied: true,
     },
+    dressStyle: {
+      type: Array,
+      required: true,
+    },
   },
   {
     timestamps: true,
