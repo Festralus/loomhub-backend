@@ -485,7 +485,6 @@ exports.addNewItem = async (req, res) => {
 
     // Generate a unique GID (UUID)
     const GID = `item-${uuidv4()}`;
-    console.log(GID);
 
     // Ensure stock is an array with valid items
     if (!Array.isArray(stock) || stock.length === 0) {
@@ -526,6 +525,8 @@ exports.addNewItem = async (req, res) => {
       careInstructions,
       detailsImages,
     });
+
+    console.log(newProduct.GID);
 
     // Save the new product to the database
     await newProduct.save();
