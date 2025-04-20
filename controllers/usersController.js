@@ -111,19 +111,61 @@ exports.createUser = async (req, res) => {
   }
 };
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+// Check if the entered nickname is available
+exports.checkNicknameAvailability = async (req, res) => {
+  try {
+    const { nickname } = req.body;
+
+    if (!nickname || nickname.trim() === "") {
+      return res.status(400).json({ message: "Nickname is required" });
+    }
+
+    // const user = await User.findOne({ nickname }).exec();
+    const user = await User.findOne({
+      nickname: {
+        $regex: new RegExp("^" + escapeRegExp(nickname) + "$", "i"),
+      },
+    }).exec();
+
+    if (user) {
+      return res.status(200).json({ available: false });
+    }
+    return res.status(200).json({ available: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 // Login user
 exports.loginUser = async (req, res) => {
   try {
     const { nickname, password } = req.body;
-    // Allows to login via nickname as well as email
-    // const nickname = email;
 
-    // Find user by email OR nickname
-    // const user = nickname.includes("@")
-    //   ? await User.findOne({ email }).exec()
-    //   : await User.findOne({ nickname }).exec();
+    if (
+      nickname.length < 5 ||
+      nickname.length > 20 ||
+      !/^[a-zA-Z0-9_]+$/.test(nickname)
+    ) {
+      return res.status(400).json({ message: "Nickname format is invalid" });
+    }
 
-    const user = await User.findOne({ nickname }).exec();
+    if (
+      password.length < 5 ||
+      password.length > 20 ||
+      !/^[a-zA-Z0-9]+$/.test(password)
+    ) {
+      return res.status(400).json({ message: "Password format is invalid" });
+    }
+
+    const user = await User.findOne({
+      nickname: {
+        $regex: new RegExp("^" + escapeRegExp(nickname) + "$", "i"),
+      },
+    }).exec();
 
     // If no user found
     if (!user) {
@@ -151,30 +193,6 @@ exports.loginUser = async (req, res) => {
       token,
       message: "Login successful",
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-// Check if the entered nickname is available
-exports.checkNicknameAvailability = async (req, res) => {
-  try {
-    const { nickname } = req.body;
-
-    // const user = await User.findOne({ nickname }).exec();
-    const user = await User.findOne({
-      nickname: { $regex: new RegExp("^" + nickname.toLowerCase() + "$", "i") },
-    }).exec();
-
-    if (user) {
-      return res
-        .status(409)
-        .json({ message: "This nickname is already taken" });
-    } else if (!user) {
-      return res.status(200).json({ message: "This nickname is available" });
-    } else {
-    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });

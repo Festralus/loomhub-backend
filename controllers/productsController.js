@@ -355,6 +355,11 @@ exports.getSliderProductsList = async (req, res) => {
 //     res.status(500).json({ message: "Internal server error" });
 //   }
 // };
+
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "\\$&");
+}
+
 exports.searchProducts = async (req, res) => {
   try {
     const { query } = req.query;
@@ -362,7 +367,7 @@ exports.searchProducts = async (req, res) => {
       return res.status(400).json({ message: "Query parameter is required" });
     }
 
-    const regex = new RegExp(query, "i");
+    const regex = new RegExp(escapeRegExp(query), "i");
     let results = [];
 
     // 1. Search by name first
