@@ -21,6 +21,7 @@ const {
 const {
   findProductReview,
 } = require("../controllers/productReviewsController");
+const { sendSubscriptionEmail } = require("../controllers/mailerController");
 
 // Endpoints
 // router.get("/users", getUsers);
@@ -36,5 +37,6 @@ router.get("/getWebsiteReviews", GetWebsiteReviews);
 router.post("/productByGid", productByGid);
 router.post("/findProductReview", findProductReview);
 router.post("/addNewItem", addNewItem);
+router.post("/sendEmail", sendSubscriptionEmail);
 
 module.exports = router;

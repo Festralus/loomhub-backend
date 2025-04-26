@@ -63,6 +63,10 @@ async function updateProductRating(product, newRating) {
   }
 }
 
+async function disconnectDB() {
+  await mongoose.connection.close();
+}
+
 async function syncProductRatings() {
   await connectDB();
   const allProducts = await fetchAllProducts();
@@ -71,6 +75,7 @@ async function syncProductRatings() {
     const newAverageRating = calculateAverageRating(ratings);
     await updateProductRating(product.GID, newAverageRating);
   }
+  await disconnectDB();
 }
 
 syncProductRatings();

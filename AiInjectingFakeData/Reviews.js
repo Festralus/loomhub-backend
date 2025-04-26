@@ -138,5 +138,3 @@ async function autoFillReviews() {
 }
 
 autoFillReviews();
-
-module.exports = { generateProductReviewsForProduct };
