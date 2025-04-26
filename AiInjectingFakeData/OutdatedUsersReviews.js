@@ -6,8 +6,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Mongoose models
-const User = require("./models/User");
-const WebsiteReview = require("./models/WebsiteReview");
+const User = require("../models/User");
+const WebsiteReview = require("../models/WebsiteReview");
 
 // Helper to create hashed passwords
 const hashPassword = async (password) => {

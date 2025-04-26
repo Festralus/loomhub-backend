@@ -111,10 +111,10 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// Check if the entered nickname is available
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-// Check if the entered nickname is available
 exports.checkNicknameAvailability = async (req, res) => {
   try {
     const { nickname } = req.body;
