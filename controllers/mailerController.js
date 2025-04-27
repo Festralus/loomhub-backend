@@ -164,14 +164,6 @@ exports.sendSubscriptionEmail = async (req, res) => {
               >
             </li>
             <li>
-            Resume:
-            <a
-              href="https://drive.google.com/file/d/13shqyy_UANeF8TjCa6u-tJJPuqkklzsR/view?usp=sharing"
-              style="color: #1a73e8; text-decoration: none"
-              >Google Drive link</a
-            >
-            </li>
-            <li>
               Portfolio:
               <a
                 href="https://loomhub.vercel.app"
