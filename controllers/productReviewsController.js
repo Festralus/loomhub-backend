@@ -1,7 +1,30 @@
 const ProductReview = require("../models/ProductReview");
 const Product = require("../models/Product");
+const User = require("../models/User");
 
-const addOrUpdateProductReview = async (req, res) => {
+exports.findProductReview = async (req, res) => {
+  const { productID } = req.body;
+
+  const reviews = await ProductReview.find({ product: productID });
+
+  const payload = await Promise.all(
+    reviews.map(async (review) => {
+      const user = await User.findOne({ GID: review.user });
+
+      return {
+        product: review.product,
+        user: user.nickname,
+        rating: review.rating,
+        comment: review.comment,
+        createdAt: review.createdAt,
+      };
+    })
+  );
+
+  res.json(payload);
+};
+
+exports.addOrUpdateProductReview = async (req, res) => {
   const { productId, rating, comment } = req.body;
   const userId = req.user.id;
 
@@ -40,5 +63,3 @@ const addOrUpdateProductReview = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
-module.exports = { addOrUpdateProductReview };

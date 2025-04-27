@@ -2,17 +2,11 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    },
-
     nickname: {
       type: String,
       required: true,
       unique: true,
+      // match: /^[a-zA-Z0-9]{3,30}$/,
     },
     password: {
       type: String,
@@ -25,8 +19,6 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["user", "admin"],
-      default: "user",
     },
     profilePicUrl: {
       type: String,
