@@ -16,6 +16,10 @@ yarn install
 bun install
 ```
 
+## Development Server
+
+Start the development server on `http://localhost:3001`:
+
 ```bash
 # npm
 npm run dev

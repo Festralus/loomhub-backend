@@ -18,9 +18,7 @@ const { updateOrderStatus } = require("../controllers/ordersController");
 const {
   GetWebsiteReviews,
 } = require("../controllers/websiteReviewsController");
-const {
-  findProductReview,
-} = require("../controllers/productReviewsController");
+const { getProductReview } = require("../controllers/productReviewsController");
 const { sendSubscriptionEmail } = require("../controllers/mailerController");
 
 // Endpoints
@@ -35,7 +33,7 @@ router.get("/getSliderProductsList", getSliderProductsList);
 router.put("/orders/:orderId", updateOrderStatus);
 router.get("/getWebsiteReviews", GetWebsiteReviews);
 router.post("/productByGid", productByGid);
-router.post("/findProductReview", findProductReview);
+router.post("/getProductReview", getProductReview);
 router.post("/addNewItem", addNewItem);
 router.post("/sendEmail", sendSubscriptionEmail);
 

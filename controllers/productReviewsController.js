@@ -2,7 +2,7 @@ const ProductReview = require("../models/ProductReview");
 const Product = require("../models/Product");
 const User = require("../models/User");
 
-exports.findProductReview = async (req, res) => {
+exports.getProductReview = async (req, res) => {
   const { productID } = req.body;
 
   const reviews = await ProductReview.find({ product: productID });
