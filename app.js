@@ -9,7 +9,11 @@ const app = express();
 
 // CORS configuration options
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://loomhub.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://loomhub.vercel.app",
+    "http://loomhub.vercel.app",
+  ],
   credentials: true,
   optionsSuccessStatus: 204,
 };
